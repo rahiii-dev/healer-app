@@ -1,0 +1,9 @@
+description: Forbidden (User does not have the required role admin or employer)
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Forbidden: Insufficient privileges"

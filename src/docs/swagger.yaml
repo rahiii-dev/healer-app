@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: Healer API
+  version: '1.0.0'
+  description: |
+    This is the API documentation for the Healer therapy app, which provides a platform for mental health therapy and wellness resources.
+    This API allows users to access therapy sessions, book appointments, view therapists, and manage their wellness journeys.
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+
+servers:
+  - url: http://localhost:5000
+    description: Local development server
+
+tags:
+  - name: Auth
+    description: Authentication-related actions.
+  - name: Admin
+    description: Admin-related actions.
+  - name: Therapists
+    description: Therapist-related actions.
+
+components:
+  securitySchemes:
+    bearerAuth: 
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

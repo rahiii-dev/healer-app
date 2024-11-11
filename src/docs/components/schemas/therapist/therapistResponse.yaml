@@ -1,0 +1,25 @@
+type: object
+required:
+  - _id
+  - name
+  - qualification
+  - specialization
+properties:
+  _id:
+    type: string
+    description: Unique identifier for the therapist.
+  name:
+    type: string
+    description: Full name of the therapist.
+  qualification:
+    type: string
+    description: Qualification of the therapist.
+  specialization:
+    type: string
+    description: Specialization of the therapist.
+  experience:
+    type: integer
+    description: Number of years of experience.
+  bio:
+    type: string
+    description: Short biography of the therapist.

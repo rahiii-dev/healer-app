@@ -1,0 +1,15 @@
+type: object
+properties:
+  token:
+    type: string
+    description: JWT token for authentication.
+  userId:
+    type: string
+    description: Unique identifier of the user.
+  role:
+    type: string
+    description: Role of the user.
+    enum:
+      - admin
+      - therapist
+      - user

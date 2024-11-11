@@ -1,0 +1,9 @@
+description: Unautherized User
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Unauthorized: No token provided"

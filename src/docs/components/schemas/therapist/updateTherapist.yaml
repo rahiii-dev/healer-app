@@ -1,0 +1,27 @@
+type: object
+properties:
+  email:
+    type: string
+    description: Email address of the therapist.
+  password:
+    type: string
+    description: Password for the therapist account.
+  name:
+    type: string
+    description: Full name of the therapist.
+  qualification:
+    type: string
+    description: Qualification of the therapist.
+  specialization:
+    type: string
+    description: Specialization of the therapist.
+  experience:
+    type: integer
+    description: Number of years of experience.
+  bio:
+    type: string
+    description: Short biography of the therapist.
+  image:
+    type: string
+    format: binary
+    description: Profile image of the therapist. Acceptable formats [jpg, jpeg, png].

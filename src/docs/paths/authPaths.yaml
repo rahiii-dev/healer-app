@@ -1,0 +1,68 @@
+/api/auth/login:
+  post:
+    tags:
+      - Auth
+    summary: Login a user
+    description: Allows any user to log in by verifying their credentials (email and password).
+    operationId: loginUser
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/login'
+    responses:
+      '200':
+        description: Successful login
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginResponse'
+      '400':
+        description: Invalid email or password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Invalid email or password"
+      '500':
+        $ref: '#/components/responses/InternalServerError'
+
+/api/auth/register:
+  post:
+    tags:
+      - Auth
+    summary: Register a normal user
+    description: Registers a new user with the role of "user".
+    operationId: registerUser
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/register'
+            
+    responses:
+      '201':
+        description: User registered successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/registerResponse'
+      '400':
+        description: Bad Request (e.g., missing required fields or email already in use)
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Email is already in use"
+      '500':
+        $ref: '#/components/responses/InternalServerError'
+
+

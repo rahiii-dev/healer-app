@@ -1,13 +1,15 @@
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
-import fs from 'fs';
-import yaml from 'js-yaml';
 import cors from 'cors';
 import morgan from 'morgan';
 import connectDB from './config/database.js';
 import environment from './config/environment.js';
 
-const swaggerDocument = yaml.load(fs.readFileSync('./docs/swaager.yaml', 'utf8'));
+import authRoutes from './routers/authRoutes.js';
+import adminRoutes from './routers/adminRoutes.js';
+import { mergeSwaggerDocs } from './docs/swaggerDocs.js';
+
+const swaggerDocument = mergeSwaggerDocs()
 
 const app = express();
 
@@ -28,12 +30,14 @@ if (environment.NODE_ENV === 'development') {
 // Swagger route
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Example health check route
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'API is healthy' });
 });
 
-// Start server
+// routes
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+
 app.listen(environment.PORT, () => {
   console.log(`Server running on http://localhost:${environment.PORT}`);
   console.log(`Swagger docs available at http://localhost:${environment.PORT}/api-docs`);

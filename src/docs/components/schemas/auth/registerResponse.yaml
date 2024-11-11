@@ -1,0 +1,26 @@
+type: object
+properties:
+  user:
+    type: object
+    properties:
+      id:
+        type: string
+        description: User ID
+      email:
+        type: string
+        description: User email
+      role:
+        type: string
+        description: User role (always "user" for this endpoint)
+      profileId:
+        type: string
+        description: Linked profile ID
+      isVerified:
+        type: boolean
+        description: Verification status of the user
+      image:
+        type: string
+        description: URL of the user's profile image
+  message:
+    type: string
+    example: "User registered successfully"
