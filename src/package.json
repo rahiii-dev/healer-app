@@ -1,0 +1,40 @@
+{
+  "name": "healer-api",
+  "version": "1.0.0",
+  "description": "API service for a therapy app",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahiii-dev/healer-app.git"
+  },
+  "author": "Rahib K V",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rahiii-dev/healer-app/issues"
+  },
+  "homepage": "https://github.com/rahiii-dev/healer-app#readme",
+  "keywords": [
+    "therapy",
+    "API",
+    "health",
+    "backend",
+    "nodejs"
+  ],
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "js-yaml": "^4.1.0",
+    "mongoose": "^8.8.1",
+    "morgan": "^1.10.0",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
