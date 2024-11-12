@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(PROFILE_ROLES), 
       required: true,
     },
-    profileId: {
+    profile: {
       type: mongoose.Schema.Types.ObjectId,
       refPath: "profileModel", 
     },

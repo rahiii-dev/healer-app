@@ -1,4 +1,4 @@
-description: Unautherized User
+description: Unautherised User
 content:
   application/json:
     schema:
@@ -6,4 +6,4 @@ content:
       properties:
         message:
           type: string
-          example: "Unauthorized: No token provided"
+          example: "Unautherised. No token provided"

@@ -50,7 +50,7 @@ export const createTherapist = asyncWrapper(async (req, res) => {
 
   await therapistProfile.save();
 
-  user.profileId = therapistProfile._id;
+  user.profile = therapistProfile._id;
   await user.save();
 
   res.status(201).json({
@@ -92,7 +92,7 @@ export const updateTherapist = asyncWrapper(async (req, res) => {
 
   const existingUser = await User.findOne({
     email,
-    profileId: { $ne: therapistProfile.id },
+    profile: { $ne: therapistProfile.id },
   });
 
   if (existingUser) {
@@ -107,7 +107,7 @@ export const updateTherapist = asyncWrapper(async (req, res) => {
 
   await therapistProfile.save();
 
-  const user = await User.findOne({ profileId: { $eq: therapistProfile.id } });
+  const user = await User.findOne({ profile: { $eq: therapistProfile.id } });
 
   if (!user) {
     return res.status(404).json({ message: "User not found" });
@@ -151,7 +151,7 @@ export const deleteTherapist = asyncWrapper(async (req, res) => {
     return res.status(404).json({ message: "Therapist profile not found" });
   }
 
-  const user = await User.findOneAndDelete({ profileId: therapistProfile._id });
+  const user = await User.findOneAndDelete({ profile: therapistProfile._id });
   if (!user) {
     return res.status(404).json({ message: "Associated user not found" });
   }
@@ -167,21 +167,21 @@ export const deleteTherapist = asyncWrapper(async (req, res) => {
 export const getTherapist = asyncWrapper(async (req, res) => {
   const { profileId } = req.params;
 
-  const therapists = await User.findOne({
-    profileId,
+  const therapist = await User.findOne({
+    profile: profileId,
     role: PROFILE_ROLES.therapist,
   })
     .populate({
-      path: "profileId",
+      path: "profile",
       model: PROFILE_MODALS.therapist,
     })
     .select("-password");
 
-  if (!therapists) {
+  if (!therapist) {
     return res.status(404).json({ message: "Therapist not found" });
   }
 
-  return res.status(200).json({ therapists });
+  return res.status(200).json({ therapist });
 });
 
 /**
@@ -192,7 +192,7 @@ export const getTherapist = asyncWrapper(async (req, res) => {
 export const listTherapist = asyncWrapper(async (req, res) => {
   const therapists = await User.find({ role: PROFILE_ROLES.therapist })
     .populate({
-      path: "profileId",
+      path: "profile",
       model: PROFILE_MODALS.therapist,
     })
     .select("-password");

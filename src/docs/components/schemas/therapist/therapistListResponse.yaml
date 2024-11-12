@@ -1,0 +1,48 @@
+type: object
+required:
+  - _id
+  - email
+  - role
+  - profileModel
+  - isVerified
+  - profileId
+properties:
+  _id:
+    type: string
+    description: Unique identifier for the therapist.
+    example: "6732236693a33a9a3538d245"
+  email:
+    type: string
+    format: email
+    description: Email address of the therapist.
+    example: "testTherapist@gmail.com"
+  role:
+    type: string
+    enum:
+      - therapist
+    description: Role of the user, fixed to "therapist".
+    example: "therapist"
+  profileModel:
+    type: string
+    description: The profile model associated with this user.
+    example: "TherapistProfile"
+  image:
+    type: string
+    description: Path or URL to the therapist's profile image.
+    example: "defaultimage.jpeg"
+  isVerified:
+    type: boolean
+    description: Whether the therapist's email is verified.
+    example: false
+  createdAt:
+    type: string
+    format: date-time
+    description: Timestamp for when the therapist account was created.
+    example: "2024-11-11T15:31:50.384Z"
+  updatedAt:
+    type: string
+    format: date-time
+    description: Timestamp for when the therapist account was last updated.
+    example: "2024-11-11T15:31:50.562Z"
+  profile:
+    $ref: '#/components/schemas/therapistResponse'

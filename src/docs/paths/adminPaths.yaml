@@ -18,9 +18,9 @@
                 therapists:
                   type: array
                   items:
-                    $ref: '#/components/schemas/therapistResponse'
+                    $ref: '#/components/schemas/therapistListResponse'
       '401':
-        $ref: '#/components/responses/Unauthorized'
+        $ref: '#/components/responses/Unautherized'
       '403':
         $ref: '#/components/responses/Forbidden'
       '500':
@@ -60,7 +60,7 @@
                   type: string
                   example: "Email is already in use"
       '401':
-        $ref: '#/components/responses/Unauthorized'
+        $ref: '#/components/responses/Unautherized'
       '403':
         $ref: '#/components/responses/Forbidden'
       '500':
@@ -91,7 +91,7 @@
               type: object
               properties:
                 therapists:
-                  $ref: '#/components/schemas/therapistResponse'
+                  $ref: '#/components/schemas/therapistListResponse'
       '404':
         description: Therapist not found
         content:
@@ -103,7 +103,7 @@
                   type: string
                   example: "Therapist not found"
       '401':
-        $ref: '#/components/responses/Unauthorized'
+        $ref: '#/components/responses/Unautherized'
       '403':
         $ref: '#/components/responses/Forbidden'
       '500':
@@ -158,7 +158,7 @@
                   type: string
                   example: "Therapist profile not found"
       '401':
-        $ref: '#/components/responses/Unauthorized'
+        $ref: '#/components/responses/Unautherized'
       '403':
         $ref: '#/components/responses/Forbidden'
       '500':
@@ -201,7 +201,7 @@
                   type: string
                   example: "Therapist profile not found"
       '401':
-        $ref: '#/components/responses/Unauthorized'
+        $ref: '#/components/responses/Unautherized'
       '403':
         $ref: '#/components/responses/Forbidden'
       '500':
