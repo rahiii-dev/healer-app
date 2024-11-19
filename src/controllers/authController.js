@@ -33,11 +33,7 @@ export const login = asyncWrapper(async (req, res) => {
  */
 export const register = asyncWrapper(async (req, res) => {
   const { email, password, name } = req.body;
-
-  if (!email || !password || !name) {
-    return res.status(400).json({ message: "Email, password, and name are required" });
-  }
-
+  
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     return res.status(400).json({ message: "Email is already in use" });

@@ -5,11 +5,13 @@ import morgan from 'morgan';
 import connectDB from './config/database.js';
 import environment from './config/environment.js';
 
-import authRoutes from './routers/authRoutes.js';
-import adminRoutes from './routers/adminRoutes.js';
 import { mergeSwaggerDocs } from './docs/swaggerDocs.js';
 import notFoundHandler from './middlewares/notFoundMiddleware.js';
 import errorHandler from './middlewares/errorHandlingMiddleware.js';
+
+import authRoutes from './routers/authRoutes.js';
+import adminRoutes from './routers/adminRoutes.js';
+import userRoutes from './routers/userRoutes.js';
 
 const swaggerDocument = mergeSwaggerDocs()
 
@@ -39,6 +41,7 @@ app.get('/api/health', (req, res) => {
 // routes
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/user', userRoutes);
 
 // error
 app.use(notFoundHandler);

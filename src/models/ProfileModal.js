@@ -6,8 +6,6 @@ const adminProfileSchema = new mongoose.Schema({
   contactInfo: { type: String },
 });
 
-export const AdminProfile = mongoose.model("AdminProfile", adminProfileSchema);
-
 // Therapist Profile
 const therapistProfileSchema = new mongoose.Schema({
   name: { type: String, required: true },

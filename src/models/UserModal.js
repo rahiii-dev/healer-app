@@ -8,7 +8,7 @@ export const PROFILE_ROLES = Object.freeze({
 });
 
 export const PROFILE_MODALS = Object.freeze({
-    'admin': "AdminProfile",
+    'admin': "UserProfile",
     'user': "UserProfile",
     'therapist': "TherapistProfile",
 });

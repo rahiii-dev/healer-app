@@ -16,9 +16,11 @@ servers:
 tags:
   - name: Auth
     description: Authentication-related actions.
+  - name: User
+    description: User-related actions.
   - name: Admin
     description: Admin-related actions.
-  - name: Therapists
+  - name: Therapist
     description: Therapist-related actions.
 
 components:

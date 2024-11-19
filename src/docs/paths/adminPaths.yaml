@@ -206,3 +206,81 @@
         $ref: '#/components/responses/Forbidden'
       '500':
         $ref: '#/components/responses/InternalServerError'
+
+/api/admin/search:
+  get:
+    tags:
+      - Admin
+    summary: Search users by email or name
+    description: Allows an admin to search for users based on their email or name. Admin must specify the target (user) and role (e.g., therapist).
+    operationId: searchUsers
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: target
+        in: query
+        required: true
+        description: The search target. Currently supports only 'user'.
+        schema:
+          type: string
+          enum:
+            - user
+      - name: role
+        in: query
+        description: The role of the user to search for (e.g., therapist).
+        schema:
+          type: string
+          enum:
+            - therapist
+            - admin
+            - user
+      - name: query
+        in: query
+        required: true
+        description: The search string used to match email or name.
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Successful retrieval of the search results.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                users:
+                  type: array
+                  description: List of users matching the search criteria.
+                count:
+                  type: integer
+                  description: Total number of users found.
+              example:
+                users:
+                  - _id: "64c90e25305b5e23f14b93df"
+                    email: "testTherapist@gmail.com"
+                    role: "therapist"
+                    profileId:
+                      _id: "64c90e25305b5e23f14b93e1"
+                      name: "John Doe"
+                      qualification: "MBBS"
+                      specialization: "Psychology"
+                      experience: 5
+                      bio: "Experienced therapist specializing in psychology."
+                    isVerified: true
+                    image: "defaultimage.jpeg"
+                count: 1
+      '400':
+        description: Invalid query parameters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+            example:
+              message: "target, and query are required."
+      '401':
+        $ref: '#/components/responses/Unautherized'
+      '403':
+        $ref: '#/components/responses/Forbidden'
+      '500':
+        $ref: '#/components/responses/InternalServerError'
+

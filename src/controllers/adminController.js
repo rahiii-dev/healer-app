@@ -7,6 +7,74 @@ import User, {
 import asyncWrapper from "../utils/asyncWrapper.js";
 
 /**
+ * @route   GET /api/admin/search?target=user&role=therapist&query=searchstring
+ * @desc    Admin can search based on target and role
+ * @access  Private (Admin)
+ */
+async function serchUser(role, query) {
+  try {
+    const { [PROFILE_MODALS[role]]: ProfileModel } = await import("../models/ProfileModal.js");
+
+    const users = await User.find({
+      role,
+      $or: [
+        { email: { $regex: query, $options: "i" } }, 
+        {
+          profile: {
+            $in: await ProfileModel.find({
+              name: { $regex: query, $options: "i" }, 
+            }).distinct("_id"),
+          },
+        },
+      ],
+    })
+      .populate({
+        path: "profile",
+        model: PROFILE_MODALS[role],
+      })
+      .select('-password -profileModel')
+      .exec();
+
+    const filteredUsers = users.filter((user) => user.profile !== null);
+
+    return filteredUsers;
+
+  } catch (error) {
+    console.error("Error during search:", error);
+    throw error;
+  }
+}
+
+export const search = asyncWrapper(async (req, res) => {
+  const { target, role, query } = req.query;
+  const SEARCH_TARGETS = ['user']
+
+  if (!target || !query) {
+    return res.status(400).json({ message: "target, and query are required." });
+  }
+
+  if(target === 'user') {
+    if(!role){
+      return res.status(400).json({ message: "role is required if target is user" });
+    }
+
+    if (!Object.keys(PROFILE_MODALS).includes(role)) {
+      return res.status(400).json({ message: `Invalid role. Valid roles are: ${Object.keys(PROFILE_MODALS).join(', ')}` });
+    }
+
+    const users = await serchUser(role, query);
+
+    return res.json({
+      users,
+      count: users.length
+    })
+
+  } else {
+    return res.status(400).json({ message: `Invalid serch target. Valid targets are: ${SEARCH_TARGETS}` });
+  }
+});
+
+/**
  * @route   POST /api/admin/therapist
  * @desc    Create a new therapist profile. Only admins can create a therapist.
  * @access  Private (Admin)
@@ -57,11 +125,13 @@ export const createTherapist = asyncWrapper(async (req, res) => {
     message: "Therapist created successfully",
     therapist: {
       userId: user._id,
+      email: user.email,
       name: therapistProfile.name,
       qualification: therapistProfile.qualification,
       specialization: therapistProfile.specialization,
       experience: therapistProfile.experience,
       bio: therapistProfile.bio,
+      image: user.image,
     },
   });
 });
@@ -127,11 +197,13 @@ export const updateTherapist = asyncWrapper(async (req, res) => {
     message: "Therapist updated successfully",
     therapist: {
       userId: user._id,
+      email: user.email,
       name: therapistProfile.name,
       qualification: therapistProfile.qualification,
       specialization: therapistProfile.specialization,
       experience: therapistProfile.experience,
       bio: therapistProfile.bio,
+      image: user.image,
     },
   });
 });
@@ -175,7 +247,7 @@ export const getTherapist = asyncWrapper(async (req, res) => {
       path: "profile",
       model: PROFILE_MODALS.therapist,
     })
-    .select("-password");
+    .select("-password -profileModel");
 
   if (!therapist) {
     return res.status(404).json({ message: "Therapist not found" });
@@ -195,7 +267,7 @@ export const listTherapist = asyncWrapper(async (req, res) => {
       path: "profile",
       model: PROFILE_MODALS.therapist,
     })
-    .select("-password");
+    .select("-password -profileModel");
 
   return res.status(200).json({ therapists });
 });
