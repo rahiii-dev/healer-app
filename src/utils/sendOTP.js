@@ -1,13 +1,14 @@
 import crypto from "node:crypto";
 import OTP from "../models/OtpModal.js";
+import mailTransporter from "./mailTransporter.js";
 
-const generateOtp = async (userId) => {
+const generateOtp = async () => {
   return crypto.randomInt(100000, 999999);
 };
 
 export const sendOtpEmail = async (email) => {
   try {
-    const otp = generateOtp()
+    const otp = (await generateOtp()).toString()
     // console.log(email);
     // console.log(otp);
 
@@ -33,10 +34,11 @@ export const sendOtpEmail = async (email) => {
       `,
     };
 
-    await transporter.sendMail(mailOptions);
+    await mailTransporter.sendMail(mailOptions);
 
     return "OTP sent successfully";
   } catch (error) {
+    // console.log(error);
     throw new Error("Failed to send OTP");
   }
 };

@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
-import environment from './environment';
+import environment from '../config/environment.js';
 
-const transporter = nodemailer.createTransport({
+const mailTransporter = nodemailer.createTransport({
     service: 'Gmail',
     auth : {
         user: environment.MAIL_ID,
@@ -9,4 +9,4 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-export default transporter
+export default mailTransporter

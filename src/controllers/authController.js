@@ -23,13 +23,39 @@ export const login = asyncWrapper(async (req, res) => {
     return res.status(400).json({ message: "Invalid email or password" });
   }
 
+  if (user.role === PROFILE_ROLES.user && !user.isVerified) {
+    try {
+      await sendOtpEmail(user.email);
+      return res.json({
+        message: "User not veified. Otp send",
+        token: null,
+        userId: user._id,
+        role: user.role,
+        isVerified: user.isVerified,
+      });
+    } catch (error) {
+      return res.json({
+        message: "User not veified. Failed to send otp",
+        token: null,
+        userId: user._id,
+        role: user.role,
+        isVerified: user.isVerified,
+      });
+    }
+  }
+
   const token = generateToken({
     userId: user._id,
     role: user.role,
     isVerified: user.isVerified,
   });
 
-  return res.json({ token, userId: user._id, role: user.role, isVerified: user.isVerified });
+  return res.json({
+    token,
+    userId: user._id,
+    role: user.role,
+    isVerified: user.isVerified,
+  });
 });
 
 /**
@@ -71,8 +97,8 @@ export const register = asyncWrapper(async (req, res) => {
     });
   } catch (error) {
     return res.status(400).json({
-      message: "User registered. Failed to send OTP."
-    })
+      message: "User registered. Failed to send OTP.",
+    });
   }
 });
 
@@ -83,23 +109,23 @@ export const register = asyncWrapper(async (req, res) => {
  */
 export const resendOTP = asyncWrapper(async (req, res) => {
   const { email } = req.body;
-  const userExist = await User.findOne({ email })
+  const userExist = await User.findOne({ email });
 
   if (!userExist) {
     return res.status(404).json({
-      message: "User not found."
-    })
+      message: "User not found.",
+    });
   }
 
   try {
     await sendOtpEmail(userExist.email);
     return res.status(200).json({
-      message: "New otp send to your mail."
+      message: "New otp send to your mail.",
     });
   } catch (error) {
     return res.status(400).json({
-      message: "Failed to resend OTP."
-    })
+      message: "Failed to resend OTP.",
+    });
   }
 });
 
@@ -108,25 +134,30 @@ export const resendOTP = asyncWrapper(async (req, res) => {
  * @desc    Verify otp send by user
  * @access  Public
  */
-export const validateOTP = asyncWrapper(async (req, res) => {
+export const verifyOTP = asyncWrapper(async (req, res) => {
   const { email, otp } = req.body;
   const otpExist = await OTP.findOne({ email });
   const userExist = await User.findOne({ email }).select("-password");
 
-  if (!otpExist || !userExist || !await otpExist.verifyOtp(otp)) {
+  if (!otpExist || !userExist || !(await otpExist.verifyOtp(otp))) {
     return res.status(400).json({
-      message: "Invalid or expired otp"
-    })
+      message: "Invalid or expired otp",
+    });
   }
 
   userExist.isVerified = true;
   await userExist.save();
-  
+
   const token = generateToken({
     userId: userExist._id,
     role: userExist.role,
     isVerified: userExist.isVerified,
   });
 
-  return res.json({ token, userId: userExist._id, role: userExist.role, isVerified: userExist.isVerified });
+  return res.json({
+    token,
+    userId: userExist._id,
+    role: userExist.role,
+    isVerified: userExist.isVerified,
+  });
 });
