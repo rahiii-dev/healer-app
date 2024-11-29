@@ -18,12 +18,17 @@
           application/json:
             schema:
               $ref: '#/components/schemas/LoginResponse'
+
       '400':
         description: Invalid email or password
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ErrorResponse'
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Invalid email or password"
       '500':
         $ref: '#/components/responses/InternalServerError'
 
@@ -52,7 +57,11 @@
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ErrorResponse'
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Email is already in use"
       '500':
         $ref: '#/components/responses/InternalServerError'
 
