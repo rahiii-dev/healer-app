@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import OTP from "../models/OtpModal";
+import OTP from "../models/OtpModal.js";
 
 const generateOtp = async (userId) => {
   return crypto.randomInt(100000, 999999);

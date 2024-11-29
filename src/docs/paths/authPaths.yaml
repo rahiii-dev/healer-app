@@ -10,24 +10,20 @@
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/login'
+            $ref: '#/components/schemas/LoginRequest'
     responses:
       '200':
         description: Successful login
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/loginResponse'
+              $ref: '#/components/schemas/LoginResponse'
       '400':
         description: Invalid email or password
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: "Invalid email or password"
+              $ref: '#/components/schemas/ErrorResponse'
       '500':
         $ref: '#/components/responses/InternalServerError'
 
@@ -35,7 +31,6 @@
   post:
     tags:
       - Auth
-      - User
     summary: Register a normal user
     description: Registers a new user with the role of "user".
     operationId: registerUser
@@ -44,17 +39,39 @@
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/register'
-            
+            $ref: '#/components/schemas/RegisterRequest'
     responses:
       '201':
         description: User registered successfully
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/registerResponse'
+              $ref: '#/components/schemas/RegisterResponse'
       '400':
-        description: Bad Request (e.g., missing required fields or email already in use)
+        description: Email is already in use
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorResponse'
+      '500':
+        $ref: '#/components/responses/InternalServerError'
+
+/api/auth/resend-otp:
+  post:
+    tags:
+      - Auth
+    summary: Resend OTP to the user
+    description: Resends a new OTP to the user's registered email address.
+    operationId: resendOtp
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResendOtpRequest'
+    responses:
+      '200':
+        description: Resnd otp in users email
         content:
           application/json:
             schema:
@@ -62,8 +79,60 @@
               properties:
                 message:
                   type: string
-                  example: "Email is already in use"
+                  example: "New otp send to your mail"
+
+      '400':
+        description: Failed to send otp
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Failed to resend OTP"
+      '404':
+        description: User or profile not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "User not found"
       '500':
         $ref: '#/components/responses/InternalServerError'
 
-
+/api/auth/verify-otp:
+  post:
+    tags:
+      - Auth
+    summary: Verify OTP
+    description: Verifies the OTP submitted by the user and updates their verification status.
+    operationId: verifyOtp
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VerifyOtpRequest'
+    responses:
+      '200':
+        description: OTP verified successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginResponse'
+      '400':
+        description: Invalid OTP
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Invalid or expired otp"
+      '500':
+        $ref: '#/components/responses/InternalServerError'

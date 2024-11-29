@@ -81,7 +81,7 @@ export const register = asyncWrapper(async (req, res) => {
  * @desc    Resend otp to email
  * @access  Public
  */
-export const resendOTP = asyncHandler(async (req, res) => {
+export const resendOTP = asyncWrapper(async (req, res) => {
   const { email } = req.body;
   const userExist = await User.findOne({ email })
 
@@ -108,13 +108,13 @@ export const resendOTP = asyncHandler(async (req, res) => {
  * @desc    Verify otp send by user
  * @access  Public
  */
-export const validateOTP = asyncHandler(async (req, res) => {
+export const validateOTP = asyncWrapper(async (req, res) => {
   const { email, otp } = req.body;
   const otpExist = await OTP.findOne({ email });
   const userExist = await User.findOne({ email }).select("-password");
 
   if (!otpExist || !userExist || !await otpExist.verifyOtp(otp)) {
-    return res.status(404).json({
+    return res.status(400).json({
       message: "Invalid or expired otp"
     })
   }

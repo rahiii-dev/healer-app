@@ -23,4 +23,4 @@ properties:
         description: URL of the user's profile image
   message:
     type: string
-    example: "User registered successfully"
+    example: "User registered. OTP send succesfully"
