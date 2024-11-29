@@ -12,6 +12,8 @@ const environment = {
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
   },
+  MAIL_ID: process.env.MAIL_ID,
+  MAIL_PASSWORD: process.env.MAIL_PASSWORD
 };
 
 export default environment;

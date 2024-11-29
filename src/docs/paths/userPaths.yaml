@@ -54,7 +54,7 @@
                   type: string
                   example: "Invalid role: unknownRole"
       '401':
-        $ref: '#/components/responses/Unauthorized'
+        $ref: '#/components/responses/Unautherized'
       '404':
         description: User or profile not found
         content:
@@ -67,3 +67,15 @@
                   example: "User not found"
       '500':
         $ref: '#/components/responses/InternalServerError'
+
+/api/user/test:
+  get:
+    tags:
+      - User
+    summary: Testing
+    description: testing whether user id verfigied
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: User is verified

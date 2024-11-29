@@ -13,3 +13,6 @@ properties:
       - admin
       - therapist
       - user
+  isVerified:
+    type: boolean
+    description: User is verified or not.

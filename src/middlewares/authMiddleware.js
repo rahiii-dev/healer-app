@@ -16,3 +16,13 @@ export const isAuthenticated = (req, res, next) => {
     req.user = decoded; 
     next();
 };
+
+export const isVerified = (req, res, next) => {
+  if(!req.user.isVerified){
+    return res
+      .status(403)
+      .json({ message: "Forbidden: You are not a verified" });
+  }
+
+  next()
+}
