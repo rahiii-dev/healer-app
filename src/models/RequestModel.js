@@ -20,7 +20,7 @@ const RequestSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: Object.keys(REQUEST_STATUS),
+      enum: Object.values(REQUEST_STATUS),
       default: REQUEST_STATUS.pending,
     },
   },

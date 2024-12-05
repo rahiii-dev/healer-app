@@ -1,5 +1,5 @@
 import Request, { REQUEST_STATUS } from "../models/RequestModel.js";
-import User from "../models/UserModal.js";
+import User, { PROFILE_ROLES } from "../models/UserModal.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
 import { isValidObjectId } from "mongoose";
 
@@ -14,7 +14,7 @@ export const listTherapistsForUser = asyncWrapper(async (req, res) => {
     const requestedTherapists = await Request.find({ client: userId, status: { $ne: REQUEST_STATUS.declined } }).distinct("therapist");
   
     const availableTherapists = await User.find({ 
-      _id: { $nin: requestedTherapists } 
+      _id: { $nin: requestedTherapists }, role: PROFILE_ROLES.therapist 
     }).populate('profile').select('-password');
   
     return res.status(200).json({ therapists: availableTherapists });
@@ -96,12 +96,12 @@ export const respondToRequest = asyncWrapper(async (req, res) => {
 });
 
 /**
- * @route   GET /api/requests/therapist/:therapistId
+ * @route   GET /api/requests/therapist
  * @desc    Therapist fetch their requests
  * @access  Private for Therapist only
  */
 export const getRequestsForTherapist = asyncWrapper(async (req, res) => {
-  const { therapistId } = req.params;
+  const  therapistId = req.user.userId;
   const { status } = req.query;
 
   if (!isValidObjectId(therapistId)) {
@@ -120,18 +120,19 @@ export const getRequestsForTherapist = asyncWrapper(async (req, res) => {
     populate: {
       path: "profile",
     },
+    select: "-password"
   });
 
   return res.status(200).json({ requests });
 });
 
 /**
- * @route   GET /api/requests/client/:clientId
+ * @route   GET /api/requests/client
  * @desc    Client fetch their requests
  * @access  Private for Client only
  */
 export const getRequestsForClient = asyncWrapper(async (req, res) => {
-  const { clientId } = req.params;
+  const clientId = req.user.userId;
   const { status } = req.query;
 
   if (!isValidObjectId(clientId)) {
@@ -150,6 +151,7 @@ export const getRequestsForClient = asyncWrapper(async (req, res) => {
     populate: {
       path: "profile",
     },
+    select: "-password"
   });
 
   return res.status(200).json({ requests });

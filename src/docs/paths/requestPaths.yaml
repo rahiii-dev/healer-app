@@ -73,7 +73,7 @@
                 enum:
                   - accepted
                   - declined
-                example: "accepted"
+                example: "Accepted"
     responses:
       '200':
         description: Request responded successfully
@@ -86,7 +86,7 @@
       '500':
         $ref: '#/components/responses/InternalServerError'
 
-/api/requests/therapist/{therapistId}:
+/api/requests/therapist:
   get:
     tags:
       - Therapist
@@ -96,22 +96,16 @@
     security:
       - bearerAuth: []
     parameters:
-      - name: therapistId
-        in: path
-        required: true
-        schema:
-          type: string
-        example: "64b61e1e59bdfc6f12a34b9e"
       - name: status
         in: query
         required: false
         schema:
           type: string
           enum:
-            - pending
-            - accepted
-            - declined
-        example: "pending"
+            - Pending
+            - Accepted
+            - Declined
+        example: "Pending"
     responses:
       '200':
         description: List of client requests retrieved successfully
@@ -122,7 +116,7 @@
       '500':
         $ref: '#/components/responses/InternalServerError'
 
-/api/requests/client/{clientId}:
+/api/requests/client:
   get:
     tags:
       - User
@@ -132,12 +126,16 @@
     security:
       - bearerAuth: []
     parameters:
-      - name: clientId
-        in: path
-        required: true
+      - name: status
+        in: query
+        required: false
         schema:
           type: string
-        example: "64b61e1e59bdfc6f12a34b9e"
+          enum:
+            - Pending
+            - Accepted
+            - Declined
+        example: "Pending"
     responses:
       '200':
         description: List of therapist requests retrieved successfully
