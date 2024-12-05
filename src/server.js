@@ -12,6 +12,7 @@ import errorHandler from './middlewares/errorHandlingMiddleware.js';
 import authRoutes from './routers/authRoutes.js';
 import adminRoutes from './routers/adminRoutes.js';
 import userRoutes from './routers/userRoutes.js';
+import requestRoutes from './routers/requestRoutes';
 
 const swaggerDocument = mergeSwaggerDocs()
 
@@ -42,6 +43,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/requests', requestRoutes);
 
 // error
 app.use(notFoundHandler);

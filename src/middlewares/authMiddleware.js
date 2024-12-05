@@ -1,3 +1,4 @@
+import { PROFILE_ROLES } from "../models/UserModal.js";
 import { getTokenFromHeaders, verifyToken } from "../utils/jwt.js";
 
 export const isAuthenticated = (req, res, next) => {
@@ -26,3 +27,20 @@ export const isVerified = (req, res, next) => {
 
   next()
 }
+
+
+export const AccessTo = (...roles) => {
+  const allowedRoles = Object.values(PROFILE_ROLES);
+  const invalidRoles = roles.filter((role) => !allowedRoles.includes(role));
+  if (invalidRoles.length > 0) {
+    throw new Error(`Invalid roles provided for restriction: ${invalidRoles.join(", ")}`);
+  }
+
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ message: "Forbidden: You do not have permission to perform this action." });
+    }
+
+    next();
+  };
+};
