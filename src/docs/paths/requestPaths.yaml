@@ -1,3 +1,20 @@
+/api/user/therapists:
+  get:
+    tags:
+      - User
+    summary: List therapists available for the user to send requests
+    description: Retrieves a list of therapists who are available for the user to send requests, excluding therapists the user has already requested and those whose requests have been declined.
+    operationId: listTherapistsForUser
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: List of available therapists
+      '401':
+        $ref: '#/components/responses/Unautherized'
+      '500':
+        $ref: '#/components/responses/InternalServerError'
+
 /api/requests:
   post:
     tags:
@@ -21,10 +38,14 @@
                 type: string
                 example: "64b61e1e59bdfc6f12a34b9e"
     responses:
+      '200':
+        description: Request sent successfully, the therapist was previously declined.
       '201':
         description: Request sent successfully
       '422':
         description: Invalid or missing client/therapist ID
+      '401':
+        $ref: '#/components/responses/Unautherized'
       '500':
         $ref: '#/components/responses/InternalServerError'
 
@@ -60,6 +81,8 @@
         description: Request not found
       '422':
         description: Invalid request ID or status
+      '401':
+        $ref: '#/components/responses/Unautherized'
       '500':
         $ref: '#/components/responses/InternalServerError'
 
@@ -94,6 +117,8 @@
         description: List of client requests retrieved successfully
       '422':
         description: Invalid therapist ID or status filter
+      '401':
+        $ref: '#/components/responses/Unautherized'
       '500':
         $ref: '#/components/responses/InternalServerError'
 
@@ -118,5 +143,7 @@
         description: List of therapist requests retrieved successfully
       '422':
         description: Invalid client ID
+      '401':
+        $ref: '#/components/responses/Unautherized'
       '500':
         $ref: '#/components/responses/InternalServerError'
