@@ -1,0 +1,122 @@
+/api/requests:
+  post:
+    tags:
+      - User
+    summary: Send a request to a therapist
+    description: Allows a client to send a request to a therapist.
+    operationId: sendRequest
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              clientId:
+                type: string
+                example: "64b61e1e59bdfc6f12a34b9e"
+              therapistId:
+                type: string
+                example: "64b61e1e59bdfc6f12a34b9e"
+    responses:
+      '201':
+        description: Request sent successfully
+      '422':
+        description: Invalid or missing client/therapist ID
+      '500':
+        $ref: '#/components/responses/InternalServerError'
+
+/api/requests/respond:
+  post:
+    tags:
+      - Therapist
+    summary: Respond to a client request
+    description: Allows a therapist to respond to a client's request by accepting or declining it.
+    operationId: respondToRequest
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              requestId:
+                type: string
+                example: "64b61e1e59bdfc6f12a34b9e"
+              status:
+                type: string
+                enum:
+                  - accepted
+                  - declined
+                example: "accepted"
+    responses:
+      '200':
+        description: Request responded successfully
+      '404':
+        description: Request not found
+      '422':
+        description: Invalid request ID or status
+      '500':
+        $ref: '#/components/responses/InternalServerError'
+
+/api/requests/therapist/{therapistId}:
+  get:
+    tags:
+      - Therapist
+    summary: Get requests for a therapist
+    description: Retrieves all client requests for a specific therapist, optionally filtered by status.
+    operationId: getRequestsForTherapist
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: therapistId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: "64b61e1e59bdfc6f12a34b9e"
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+            - pending
+            - accepted
+            - declined
+        example: "pending"
+    responses:
+      '200':
+        description: List of client requests retrieved successfully
+      '422':
+        description: Invalid therapist ID or status filter
+      '500':
+        $ref: '#/components/responses/InternalServerError'
+
+/api/requests/client/{clientId}:
+  get:
+    tags:
+      - User
+    summary: Get requests for a client
+    description: Retrieves all therapist requests for a specific client.
+    operationId: getRequestsForClient
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: clientId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: "64b61e1e59bdfc6f12a34b9e"
+    responses:
+      '200':
+        description: List of therapist requests retrieved successfully
+      '422':
+        description: Invalid client ID
+      '500':
+        $ref: '#/components/responses/InternalServerError'
