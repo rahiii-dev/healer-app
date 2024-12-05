@@ -1,7 +1,24 @@
 import Request, { REQUEST_STATUS } from "../models/RequestModel.js";
+import User from "../models/UserModal.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
 import { isValidObjectId } from "mongoose";
 
+/**
+ * @route   GET /api/user/therapists
+ * @desc    List therapists available for the user to send requests
+ * @access  Private for User only
+ */
+export const listTherapistsForUser = asyncWrapper(async (req, res) => {
+    const { userId } = req.user; 
+  
+    const requestedTherapists = await Request.find({ client: userId, status: { $ne: REQUEST_STATUS.declined } }).distinct("therapist");
+  
+    const availableTherapists = await User.find({ 
+      _id: { $nin: requestedTherapists } 
+    }).populate('profile').select('-password');
+  
+    return res.status(200).json({ therapists: availableTherapists });
+});
 
 /**
  * @route   POST /api/requests
@@ -17,6 +34,24 @@ export const sendRequest = asyncWrapper(async (req, res) => {
 
   if (!isValidObjectId(clientId) || !isValidObjectId(therapistId)) {
     return res.status(422).json({ message: "Invalid Client ID or Therapist ID." });
+  }
+
+  const existingRequest = await Request.findOne({
+    client: clientId,
+    therapist: therapistId,
+  });
+
+  if (existingRequest) {
+    if (existingRequest.status === REQUEST_STATUS.declined) {
+      existingRequest.status = REQUEST_STATUS.pending; 
+      await existingRequest.save();
+      return res.status(200).json({
+        message: "Request sent successfully, the therapist was previously declined.",
+        request: existingRequest,
+      });
+    } else {
+      return res.status(422).json({ message: "You have already sent a request to this therapist." });
+    }
   }
 
   const newRequest = await Request.create({
@@ -73,7 +108,7 @@ export const getRequestsForTherapist = asyncWrapper(async (req, res) => {
     return res.status(422).json({ message: "Invalid Therapist ID." });
   }
 
-  if (status && !Object.values(REQUEST_STATUS).includes(status)) {
+  if (!Object.values(REQUEST_STATUS).includes(status)) {
     return res.status(422).json({ message: "Invalid status filter." });
   }
 
@@ -97,12 +132,20 @@ export const getRequestsForTherapist = asyncWrapper(async (req, res) => {
  */
 export const getRequestsForClient = asyncWrapper(async (req, res) => {
   const { clientId } = req.params;
+  const { status } = req.query;
 
   if (!isValidObjectId(clientId)) {
     return res.status(422).json({ message: "Invalid Client ID." });
   }
 
-  const requests = await Request.find({ client: clientId }).populate({
+  if (!Object.values(REQUEST_STATUS).includes(status)) {
+    return res.status(422).json({ message: "Invalid status filter." });
+  }
+
+  const query = { client: clientId };
+  if (status) query.status = status;
+
+  const requests = await Request.find(query).populate({
     path: "therapist",
     populate: {
       path: "profile",

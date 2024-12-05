@@ -32,15 +32,23 @@ export const isVerified = (req, res, next) => {
 export const AccessTo = (...roles) => {
   const allowedRoles = Object.values(PROFILE_ROLES);
   const invalidRoles = roles.filter((role) => !allowedRoles.includes(role));
+  
   if (invalidRoles.length > 0) {
     throw new Error(`Invalid roles provided for restriction: ${invalidRoles.join(", ")}`);
   }
 
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    const { role, isVerified } = req.user;
+
+    if (!roles.includes(role)) {
       return res.status(403).json({ message: "Forbidden: You do not have permission to perform this action." });
+    }
+
+    if (role === PROFILE_ROLES.user && !isVerified) {
+      return res.status(403).json({ message: "Forbidden: You must be verified to perform this action." });
     }
 
     next();
   };
 };
+
