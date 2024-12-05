@@ -67,15 +67,3 @@
                   example: "User not found"
       '500':
         $ref: '#/components/responses/InternalServerError'
-
-/api/user/test:
-  get:
-    tags:
-      - User
-    summary: Testing
-    description: testing whether user id verfigied
-    security:
-      - bearerAuth: []
-    responses:
-      '200':
-        description: User is verified
