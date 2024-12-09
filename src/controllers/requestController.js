@@ -26,7 +26,8 @@ export const listTherapistsForUser = asyncWrapper(async (req, res) => {
  * @access  Private for User only
  */
 export const sendRequest = asyncWrapper(async (req, res) => {
-  const { clientId, therapistId } = req.body;
+  const { therapistId } = req.body;
+  const clientId = req.user.userId;
 
   if (!clientId || !therapistId) {
     return res.status(422).json({ message: "Client ID and Therapist ID are required." });
@@ -52,6 +53,13 @@ export const sendRequest = asyncWrapper(async (req, res) => {
     } else {
       return res.status(422).json({ message: "You have already sent a request to this therapist." });
     }
+  }
+
+  const therapist = await User.findOne({_id: therapistId, role: PROFILE_ROLES.therapist});
+  console.log({therapist});
+  
+  if(!therapist) {
+    return res.status(400).json({ message: "Therapist not found" });
   }
 
   const newRequest = await Request.create({

@@ -31,9 +31,6 @@
           schema:
             type: object
             properties:
-              clientId:
-                type: string
-                example: "64b61e1e59bdfc6f12a34b9e"
               therapistId:
                 type: string
                 example: "64b61e1e59bdfc6f12a34b9e"

@@ -1,4 +1,5 @@
 import { TherapistProfile } from "../models/ProfileModal.js";
+import Request from "../models/RequestModel.js";
 import User, {
   DEFAULT_USER_IMAGE,
   PROFILE_MODALS,
@@ -227,6 +228,8 @@ export const deleteTherapist = asyncWrapper(async (req, res) => {
   if (!user) {
     return res.status(404).json({ message: "Associated user not found" });
   }
+
+  await Request.deleteMany({therapist: user.id});
 
   res.status(200).json({ message: "Therapist deleted successfully" });
 });
