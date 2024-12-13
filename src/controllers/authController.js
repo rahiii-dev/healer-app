@@ -77,7 +77,7 @@ export const register = asyncWrapper(async (req, res) => {
     email,
     password,
     role: PROFILE_ROLES.user,
-    profileId: userProfile._id,
+    profile: userProfile._id,
     profileModel: PROFILE_MODALS.user,
     isVerified: false,
   });
