@@ -1,6 +1,6 @@
-import { body, param } from "express-validator";
+import { body } from "express-validator";
 import moment from "moment";
-import { SLOT_DAYS } from "../models/SlotsModal";
+import { SLOT_DAYS } from "../models/SlotsModal.js";
 
 export const validateCreateSlots = [
   body("slots")

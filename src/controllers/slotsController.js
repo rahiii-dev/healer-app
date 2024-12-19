@@ -1,6 +1,5 @@
-import moment from "moment";
-import Slots from "../models/SlotsModal";
-import asyncWrapper from "../utils/asyncWrapper";
+import Slots from "../models/SlotsModal.js";
+import asyncWrapper from "../utils/asyncWrapper.js";
 
 /**
  * @route   POST /api/slots
@@ -35,6 +34,7 @@ export const createSlots = asyncWrapper(async (req, res) => {
  */
 export const getSlots = asyncWrapper(async (req, res) => {
   const therapistId = req.user.userId;
-  return await Slots.find({ therapist: therapistId });
+  const slots = await Slots.find({ therapist: therapistId });
+  return res.json(slots);
 });
 

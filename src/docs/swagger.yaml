@@ -22,6 +22,8 @@ tags:
     description: Admin-related actions.
   - name: Therapist
     description: Therapist-related actions.
+  - name: Appointment
+    description: Appointment related actions.
 
 components:
   securitySchemes:
