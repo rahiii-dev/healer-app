@@ -13,6 +13,7 @@ import authRoutes from './routers/authRoutes.js';
 import adminRoutes from './routers/adminRoutes.js';
 import userRoutes from './routers/userRoutes.js';
 import requestRoutes from './routers/requestRoutes.js';
+import slotRoutes from './routers/slotRoutes.js';
 
 const swaggerDocument = mergeSwaggerDocs()
 
@@ -44,6 +45,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/requests', requestRoutes);
+app.use('/api/slots', slotRoutes);
 
 // error
 app.use(notFoundHandler);
