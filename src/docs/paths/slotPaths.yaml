@@ -11,10 +11,10 @@
         "200":
           description: List of therapist's available slots
         "401":
-          $ref: "#/components/responses/Unauthorized"
+          $ref: "#/components/responses/Unautherized"
         "500":
           $ref: "#/components/responses/InternalServerError"
-          
+
   post:
     tags:
       - Appointment
