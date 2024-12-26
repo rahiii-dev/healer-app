@@ -1,7 +1,7 @@
 import express from "express";
 import { isAuthenticated, AccessTo } from "../middlewares/authMiddleware.js";
 import { PROFILE_ROLES } from "../models/UserModal.js";
-import { createSlots, getSlots } from "../controllers/slotsController.js";
+import { createSlots, getAvailableSlotsForDate, getSlots } from "../controllers/slotsController.js";
 import validationErrorHandler from '../middlewares/validationErrorHandler.js';
 import { validateCreateSlots } from "../validators/slotsValidators.js";
 
@@ -14,5 +14,7 @@ router.post("/",
     validateCreateSlots,
     validationErrorHandler, 
     createSlots);
+
+router.get("/:therapistId/:date", isAuthenticated, AccessTo(PROFILE_ROLES.user, PROFILE_ROLES.therapist), getAvailableSlotsForDate)
 
 export default router;

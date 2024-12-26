@@ -1,7 +1,7 @@
 /api/user/therapists:
   get:
     tags:
-      - User
+      - Request
     summary: List therapists available for the user to send requests
     description: Retrieves a list of therapists who are available for the user to send requests, excluding therapists the user has already requested and those whose requests have been declined.
     operationId: listTherapistsForUser
@@ -18,7 +18,7 @@
 /api/requests:
   post:
     tags:
-      - User
+      - Request
     summary: Send a request to a therapist
     description: Allows a client to send a request to a therapist.
     operationId: sendRequest
@@ -49,7 +49,7 @@
 /api/requests/respond:
   post:
     tags:
-      - Therapist
+      - Request
     summary: Respond to a client request
     description: Allows a therapist to respond to a client's request by accepting or declining it.
     operationId: respondToRequest
@@ -86,7 +86,7 @@
 /api/requests/therapist:
   get:
     tags:
-      - Therapist
+      - Request
     summary: Get requests for a therapist
     description: Retrieves all client requests for a specific therapist, optionally filtered by status.
     operationId: getRequestsForTherapist
@@ -116,7 +116,7 @@
 /api/requests/client:
   get:
     tags:
-      - User
+      - Request
     summary: Get requests for a client
     description: Retrieves all therapist requests for a specific client.
     operationId: getRequestsForClient
