@@ -109,4 +109,167 @@
         description: Therapist not found or no slots available for the given date
       "500":
         $ref: '#/components/responses/InternalServerError'
+
+
+/api/appointment/book/{therapistId}:
+  post:
+    tags:
+      - Appointment
+    summary: Book a slot for therapist
+    description: Allows a client to book a slot with a therapist on a specific date and time.
+    operationId: bookSlot
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: therapistId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: "64b61e1e59bdfc6f12a34b9e"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              startTime:
+                type: string
+                example: "10:00 AM"
+              endTime:
+                type: string
+                example: "11:00 AM"
+              amount:
+                type: number
+                example: 50
+              date:
+                type: string
+                format: date
+                example: "2024-12-25"
+    responses:
+      "201":
+        description: Slot successfully booked
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Slot booked successfully"
+      "400":
+        description: Slot already booked
+      "404":
+        description: Therapist or slot not found
+      "500":
+        $ref: '#/components/responses/InternalServerError'
+
+/api/appointment/therapist:
+  get:
+    tags:
+      - Appointment
+    summary: Get therapist's appointments
+    description: Retrieve appointments for the logged-in therapist, optionally filtered by status.
+    operationId: getTherapistAppointments
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: status
+        in: query
+        description: Filter appointments by status. Possible values.
+        required: false
+        schema:
+          type: string
+          enum:
+            - pending
+            - accepted
+            - confirmed
+            - completed
+            - cancelled
+    responses:
+      "200":
+        description: List of therapist's appointments.
+
+/api/appointment/client:
+  get:
+    tags:
+      - Appointment
+    summary: Get client appointments
+    description: Retrieve appointments for the logged-in client, optionally filtered by status.
+    operationId: getClientAppointments
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: status
+        in: query
+        description: Filter appointments by status.
+        required: false
+        schema:
+          type: string
+          enum:
+            - pending
+            - accepted
+            - confirmed
+            - completed
+            - cancelled
+    responses:
+      "200":
+        description: List of client's appointments.
+
+
+/api/appointment/respond:
+  put:
+    summary: Accept or Cancel an Appointment
+    description: Allows a therapist to accept or cancel an appointment.
+    tags:
+      - Appointment
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              appointmentId:
+                type: string
+                description: The ID of the appointment to respond to.
+                example: "64c5b5f4a1234e6789abcdef"
+              status:
+                type: string
+                description: The status to update the appointment with.
+                enum:
+                  - accepted
+                  - cancelled
+                example: "accepted"
+            required:
+              - appointmentId
+              - status
+    responses:
+      '200':
+        description: Appointment updated successfully.
+      '404':
+        description: Appointment not found.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Appointment not found."
+      '422':
+        description: Invalid input provided.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Invalid status."
+
+
     

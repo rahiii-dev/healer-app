@@ -20,11 +20,6 @@ const AppointmentSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    slot: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "TherapistSlot",
-      required: true,
-    },
     startTime: {
       type: String, 
       required: true,
@@ -41,6 +36,10 @@ const AppointmentSchema = new mongoose.Schema(
       type: String,
       enum: Object.values(APPOINTMENT_STATUS),
       default: APPOINTMENT_STATUS.pending,
+    },
+    date: {
+        type: String,
+        required: true
     }
   },
   { timestamps: true }
