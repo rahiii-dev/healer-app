@@ -1,3 +1,4 @@
+import AppointmentModal from "../models/AppointmentModal.js";
 import { TherapistProfile } from "../models/ProfileModal.js";
 import Request from "../models/RequestModel.js";
 import User, {
@@ -230,6 +231,7 @@ export const deleteTherapist = asyncWrapper(async (req, res) => {
   }
 
   await Request.deleteMany({therapist: user.id});
+  await AppointmentModal.deleteMany({therapist: user.id});
 
   res.status(200).json({ message: "Therapist deleted successfully" });
 });

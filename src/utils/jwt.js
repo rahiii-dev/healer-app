@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import environment from '../config/environment.js';
 
 const JWT_SECRET = environment.JWT_SECRET;
-const JWT_EXPIRATION = "1h";
+const JWT_EXPIRATION = "7d";
 
 // Generates a JWT token for a given payload.
 export function generateToken(payload, expiresIn = JWT_EXPIRATION) {
