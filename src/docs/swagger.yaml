@@ -22,6 +22,8 @@ tags:
     description: Admin-related actions.
   - name: Therapist
     description: Therapist-related actions.
+  - name: Request
+    description: Connecting to therapist throught request.
   - name: Appointment
     description: Appointment related actions.
 

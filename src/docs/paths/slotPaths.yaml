@@ -11,10 +11,10 @@
         "200":
           description: List of therapist's available slots
         "401":
-          $ref: "#/components/responses/Unautherized"
+          $ref: "#/components/responses/Unauthorized"
         "500":
           $ref: "#/components/responses/InternalServerError"
-
+          
   post:
     tags:
       - Appointment
@@ -62,3 +62,51 @@
         description: Invalid input data
       "500":
         $ref: "#/components/responses/InternalServerError"
+  
+/api/slots/{therapistId}/{date}:
+  get:
+    tags:
+      - Appointment
+    summary: Get available slots for a therapist on a specific date
+    description: Retrieves all available time slots for the therapist on the specified date, excluding those already booked in appointments.
+    operationId: getAvailableSlotsForDate
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: therapistId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: "64b61e1e59bdfc6f12a34b9e"
+      - name: date
+        in: path
+        required: true
+        schema:
+          type: string
+          format: date
+        example: "2024-12-25"
+    responses:
+      "200":
+        description: List of available slots for the therapist on the specified date
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  startTime:
+                    type: string
+                    example: "10:00 AM"
+                  endTime:
+                    type: string
+                    example: "11:00 AM"
+                  amount:
+                    type: number
+                    example: 50
+      "404":
+        description: Therapist not found or no slots available for the given date
+      "500":
+        $ref: '#/components/responses/InternalServerError'
+    
