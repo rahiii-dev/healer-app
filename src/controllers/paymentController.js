@@ -24,6 +24,9 @@ export const initiatePayment = asyncWrapper(async (req, res) => {
 
   try {
     const order = await razorpay.orders.create(options);
+    appointment.paymentOrderId = order.id;
+    await appointment.save();
+
     return res.json({
       orderId: order.id,
       amount: order.amount,
@@ -54,7 +57,13 @@ export const verifyPayment = asyncWrapper(async (req, res) => {
   const appointment = await AppointmentModal.findOne({
     paymentOrderId: orderId,
   });
+
+  if(!appointment){
+    return res.status(400).json({ message: "Invalid orderId" });
+  }
+
   appointment.status = APPOINTMENT_STATUS.confirmed;
+  appointment.paymentId = paymentId;
   await appointment.save();
 
   return res.status(200).json({ message: "Payment verified successfully" });

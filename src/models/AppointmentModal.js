@@ -40,7 +40,15 @@ const AppointmentSchema = new mongoose.Schema(
     date: {
         type: String,
         required: true
-    }
+    },
+    paymentOrderId: {
+      type: String,
+      default: null
+    },
+    paymentId: {
+      type: String,
+      default: null
+    },
   },
   { timestamps: true }
 );
