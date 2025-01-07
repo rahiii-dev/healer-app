@@ -26,10 +26,13 @@ export class MessageController extends BaseController {
 
     async sendMessage({ from, to, text }) {
         try {
-            let chat = await this.getOrCreateChat(from, to, text);
-
+            let chat = await this.getOrCreateChat(from, to);
+            
             const newMessage = await this.createMessage(chat._id, from, to, text);
 
+            chat.lastMessage = newMessage;
+            await chat.save();
+            
             await this.handleMessageDelivery(newMessage, from, to);
 
             return newMessage;
@@ -39,7 +42,7 @@ export class MessageController extends BaseController {
         }
     }
 
-    async getOrCreateChat(from, to, text) {
+    async getOrCreateChat(from, to) {
         let chat = await ConversationModal.findOne({
             participants: { $all: [from, to] },
         });
@@ -47,12 +50,8 @@ export class MessageController extends BaseController {
         if (!chat) {
             chat = await ConversationModal.create({
                 participants: [from, to],
-                lastMessage: text,
             });
-        } else {
-            chat.lastMessage = text;
-            await chat.save();
-        }
+        } 
 
         return chat;
     }
