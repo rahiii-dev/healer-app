@@ -32,8 +32,8 @@ export class MessageController extends BaseController {
 
             chat.lastMessage = newMessage;
             await chat.save();
-            
-            await this.handleMessageDelivery(newMessage, from, to);
+
+            await this.handleMessageDelivery(newMessage, to);
 
             return newMessage;
         } catch (error) {
@@ -68,18 +68,15 @@ export class MessageController extends BaseController {
         return newMessage;
     }
 
-    async handleMessageDelivery(newMessage, from, to) {
+    async handleMessageDelivery(newMessage, to) {
         const toSocketId = this.userSocketManager.get(to);
-        const fromSocketId = this.userSocketManager.get(from);
 
         if (toSocketId) {
             newMessage.status = MESSAGE_STATUS.DELIVERED;
             this.socket.to(toSocketId).emit("new-message", { newMessage });
         }
 
-        if (fromSocketId) {
-            this.socket.to(fromSocketId).emit("new-message", { newMessage });
-        }
+        this.socket.emit("new-message", { newMessage });
 
         await newMessage.save();
     }

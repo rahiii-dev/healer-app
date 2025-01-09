@@ -9,11 +9,20 @@ import asyncWrapper from "../utils/asyncWrapper.js";
  */
 export const myChats = asyncWrapper(async (req, res) => {
     const userId = req.user.userId;
+
     const chats = await ConversationModal.find({ participants: userId })
-    .populate('participants', 'profile profileModel image') 
-    .populate('lastMessage'); 
-    res.json({chats});
+        .populate({
+            path: 'participants',
+            select: 'profile profileModel image',
+            populate: {
+                path: 'profile',
+            },
+        })
+        .populate('lastMessage'); 
+
+    res.json({ chats });
 });
+
 
 /**
  * @route   GET /api/chats/:chatId
