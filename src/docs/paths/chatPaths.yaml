@@ -1,0 +1,42 @@
+/api/chats:
+  get:
+      tags:
+        - Chat
+      summary: Get all user chats
+      description: Retrieves all chats for the authenticated user. Each chat includes participants and the last message.
+      operationId: getUserChats
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of user chats
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+/api/chats/{chatId}:
+  get:
+    tags:
+      - Chat
+    summary: Get chat messages by chat ID
+    description: Retrieves all messages for a specific chat and marks all unread messages for the authenticated user as read.
+    operationId: getChatMessages
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: chatId
+        in: path
+        required: true
+        description: The ID of the chat to retrieve.
+        schema:
+          type: string
+    responses:
+      "200":
+        description: List of messages for the specified chat
+      "401":
+        $ref: "#/components/responses/Unauthorized"
+      "404":
+        description: Chat not found
+      "500":
+        $ref: "#/components/responses/InternalServerError"

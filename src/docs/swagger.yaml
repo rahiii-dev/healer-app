@@ -26,6 +26,8 @@ tags:
     description: Connecting to therapist throught request.
   - name: Appointment
     description: Appointment related actions.
+  - name: Chat
+    description: Chat related actions.
 
 components:
   securitySchemes:
