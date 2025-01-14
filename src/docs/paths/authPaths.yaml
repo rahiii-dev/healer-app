@@ -42,9 +42,38 @@
     requestBody:
       required: true
       content:
-        application/json:
+        multipart/form-data:  # Changed to support file uploads
           schema:
-            $ref: '#/components/schemas/RegisterRequest'
+            type: object
+            required:
+              - email
+              - password
+              - name
+            properties:
+              email:
+                type: string
+                description: User's email address
+                format: email
+              password:
+                type: string
+                description: User's password
+                format: password
+              name:
+                type: string
+                description: Full name of the user
+              gender:
+                type: string
+                description: User's gender
+                enum: [male, female, other]
+              age:
+                type: integer
+                description: User's age
+                minimum: 0
+                maximum: 120
+              image:
+                type: string
+                format: binary
+                description: Profile image file upload
     responses:
       '201':
         description: User registered successfully
@@ -53,7 +82,7 @@
             schema:
               $ref: '#/components/schemas/RegisterResponse'
       '400':
-        description: Email is already in use
+        description: Bad request due to validation errors or duplicate email
         content:
           application/json:
             schema:

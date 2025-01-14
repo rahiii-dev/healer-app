@@ -8,7 +8,7 @@ import { listTherapistsForUser } from '../controllers/requestController.js';
 const router = express.Router();
 
 router.get('/profile', isAuthenticated, getProfile);
-router.put('/profile', 
+router.put('/client/profile', 
     isAuthenticated,
     uploadImage('image'), 
     updateClientProfile);

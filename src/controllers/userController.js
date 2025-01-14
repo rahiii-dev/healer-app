@@ -24,13 +24,13 @@ export const getProfile = asyncWrapper(async (req, res) => {
 });
 
 /**
- * @route   PUT /api/user/profile
+ * @route   PUT /api/user/client/profile
  * @desc    update client profile
  * @access  Private
  */
 export const updateClientProfile = asyncWrapper(async (req, res) => {
   const id = req.user?.userId;
-  const { name, gender } = req.body;
+  const { name, gender, age } = req.body;
 
   if (gender && !Object.values(USER_GENDERS).includes(gender)) {
     return res.status(400).json({
@@ -38,6 +38,10 @@ export const updateClientProfile = asyncWrapper(async (req, res) => {
         USER_GENDERS
       )} are allowed.`,
     });
+  }
+
+  if(age && age < 0 || age > 120){
+    return res.status(400).json({ message: `Age with minimum 0 and maximum 120 is required` });
   }
 
   const user = await User.findById(id);
@@ -54,6 +58,10 @@ export const updateClientProfile = asyncWrapper(async (req, res) => {
 
   if (gender) {
     userProfile.gender = gender;
+  }
+
+  if(age) {
+    userProfile.age = age;
   }
 
   if (name) {

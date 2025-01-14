@@ -67,3 +67,100 @@
                   example: "User not found"
       '500':
         $ref: '#/components/responses/InternalServerError'
+
+
+/api/user/client/profile:
+  put:
+    tags:
+      - User
+    summary: Update client profile
+    description: Updates the name, gender, and profile image of the client.
+    operationId: updateClientProfile
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Updated name of the user
+              gender:
+                type: string
+                description: Updated gender of the user
+                enum: [male, female, other]
+              image:
+                type: string
+                format: binary
+                description: Updated profile image file
+    responses:
+      '200':
+        description: User profile updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "User updated successfully"
+                user:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: User's unique identifier
+                      example: "64a2b58ef0345a1234567890"
+                    email:
+                      type: string
+                      description: User's email address
+                      example: "user@example.com"
+                    role:
+                      type: string
+                      description: User's role
+                      example: "user"
+                    profile:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Full name of the user
+                          example: "John Doe"
+                        gender:
+                          type: string
+                          description: Gender of the user
+                          example: "male"
+                    isVerified:
+                      type: boolean
+                      description: Indicates if the user is verified
+                      example: true
+                    image:
+                      type: string
+                      description: URL of the user's profile image
+                      example: "https://example.com/images/profile.jpg"
+      '400':
+        description: Bad request due to validation errors
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Invalid gender type [male, female, other] are allowed."
+      '404':
+        description: User or user profile not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "User not found"
+      '500':
+        $ref: '#/components/responses/InternalServerError'
+

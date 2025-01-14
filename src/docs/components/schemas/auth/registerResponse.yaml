@@ -12,7 +12,7 @@ properties:
       role:
         type: string
         description: User role (always "user" for this endpoint)
-      profileId:
+      profile:
         type: string
         description: Linked profile ID
       isVerified:
