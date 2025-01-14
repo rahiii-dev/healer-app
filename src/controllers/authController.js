@@ -1,5 +1,5 @@
 import OTP from "../models/OtpModal.js";
-import { UserProfile } from "../models/ProfileModal.js";
+import { USER_GENDERS, UserProfile } from "../models/ProfileModal.js";
 import User, { PROFILE_MODALS, PROFILE_ROLES } from "../models/UserModal.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
 import { generateToken } from "../utils/jwt.js";
@@ -64,14 +64,24 @@ export const login = asyncWrapper(async (req, res) => {
  * @access  Public
  */
 export const register = asyncWrapper(async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, gender, age } = req.body;
+
+  if(gender && !Object.values(USER_GENDERS).includes(gender)){
+    return res.status(400).json({ message: `Invalid gender type ${Object.values(USER_GENDERS)} are allowed.` });
+  }
+
+  if(age && age < 0 || age > 120){
+    return res.status(400).json({ message: `Age with minimum 0 and maximum 120 is required` });
+  }
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     return res.status(400).json({ message: "Email is already in use" });
   }
 
-  const userProfile = await UserProfile.create({ name });
+  let imageURL = req.imageUrl || DEFAULT_USER_IMAGE;
+
+  const userProfile = await UserProfile.create({ name, gender, age });
 
   const user = await User.create({
     email,
@@ -79,6 +89,7 @@ export const register = asyncWrapper(async (req, res) => {
     role: PROFILE_ROLES.user,
     profile: userProfile._id,
     profileModel: PROFILE_MODALS.user,
+    image: imageURL,
     isVerified: false,
   });
 

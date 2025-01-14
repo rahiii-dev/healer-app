@@ -21,8 +21,26 @@ export const TherapistProfile = mongoose.model(
 );
 
 // User Profile
+export const USER_GENDERS = Object.freeze({
+  'MALE': "male",
+  'FEMALE': "female",
+  'Other': "other",
+});
+
 const userProfileSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  gender: { 
+    type: String, 
+    required: false, 
+    enum: Object.values(USER_GENDERS), 
+    lowercase: true 
+  },
+  age: {
+    type: Number,
+    required: false, 
+    min: 0, 
+    max: 120 
+  }
 });
 
 export const UserProfile = mongoose.model("UserProfile", userProfileSchema);
