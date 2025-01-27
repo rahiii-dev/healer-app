@@ -1,3 +1,4 @@
+import { CallController } from "./controller/CallController.js";
 import { MessageController } from "./controller/MessageController.js";
 import { TypingController } from "./controller/TypingController.js";
 import UserSocketManager from "./socketManager.js";
@@ -8,6 +9,7 @@ export function socket(socket) {
   const socketManger = new UserSocketManager();
   const messageController = new MessageController(socket, socketManger);
   const typingController = new TypingController(socket, socketManger);
+  const callController = new CallController(socket, socketManger);
 
   socket.on("join", async ({ userId }) => {
     socketManger.add(userId, socket.id);
@@ -27,6 +29,18 @@ export function socket(socket) {
 
   socket.on("stop-typing", (data) => {
     typingController.handleStopTyping(data);
+  });
+
+  socket.on("start-call", async (data) => {
+    await callController.startCall(data);
+  });
+
+  socket.on("accept-call", async (data) => {
+    await callController.acceptCall(data);
+  });
+
+  socket.on("end-call", async (data) => {
+    await callController.endCall(data);
   });
 
   socket.on("disconnect", async () => {
