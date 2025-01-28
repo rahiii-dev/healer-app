@@ -5,8 +5,9 @@ import UserSocketManager from "./socketManager.js";
 
 export const activeUsers = new Map();
 
+const socketManger = new UserSocketManager();
+
 export function socket(socket) {
-  const socketManger = new UserSocketManager();
   const messageController = new MessageController(socket, socketManger);
   const typingController = new TypingController(socket, socketManger);
   const callController = new CallController(socket, socketManger);
