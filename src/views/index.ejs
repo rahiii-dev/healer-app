@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Healer | Therapy App</title>
     <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" type="image/png" href="/images/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <!-- Navbar -->
     <header class="navbar">
-      <div class="logo">
+      <div class="logo satisfy-regular">
         <h1>Healer</h1>
       </div>
       <nav>
@@ -23,7 +30,8 @@
 
     <!-- Hero Section -->
     <section id="hero" class="hero">
-      <h1>Welcome to Healer</h1>
+      <img src="/images/logo.png" alt="Client App" />
+      <h1>Welcome to <span class="satisfy-regular">Healer</span></h1>
       <p>
         Your one-stop solution for managing appointments, requests, payments,
         and more!
@@ -42,10 +50,7 @@
           Explore our mobile app for clients where you can manage appointments
           and request therapy sessions.
         </p>
-        <a
-          href="<%= CLIENT_APP_URL %>"
-          target="_blank"
-          class="btn"
+        <a href="<%= CLIENT_APP_URL %>" target="_blank" class="btn"
           >Download the Client App</a
         >
       </div>
@@ -58,10 +63,7 @@
         <p>
           As a therapist, you can manage appointments and requests from clients.
         </p>
-        <a
-          href="<%= THERAPIST_APP_URL %>"
-          target="_blank"
-          class="btn"
+        <a href="<%= THERAPIST_APP_URL %>" target="_blank" class="btn"
           >Download the Therapist App</a
         >
       </div>
