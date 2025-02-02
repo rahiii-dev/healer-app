@@ -43,8 +43,12 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigins,
+}));
 app.use(express.json());
 app.use(
   morgan(environment.NODE_ENV === 'development' ? 'dev' : 'combined')
@@ -93,6 +97,6 @@ io.on('connection', socket);
 
 // Start the server
 server.listen(environment.PORT, () => {
-  console.log(`Server running on http://localhost:${environment.PORT}`);
-  console.log(`Swagger docs available at http://localhost:${environment.PORT}/api-docs`);
+  console.log(`Server running on PORT:${environment.PORT}`);
+  console.log("Allowed Origin: ", allowedOrigins);
 });
