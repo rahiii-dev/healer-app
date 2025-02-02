@@ -1,4 +1,6 @@
-# ![Healer API Logo](src/public/images/logo.png)
+<p align="center">
+  <img src="src/public/images/logo.png" width="150" />
+</p>
 
 # Healer API
 
