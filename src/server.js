@@ -19,6 +19,7 @@ import slotRoutes from './routers/slotRoutes.js';
 import appointmentRoutes from './routers/appointmentRoutes.js';
 import paymentRoutes from './routers/paymentRoutes.js';
 import chatRoutes from './routers/chatRoutes.js';
+import agoraRoutes from './routers/agoraRoutes.js';
 
 import { socket } from './socket/routes.js'; 
 import { connectRedis } from './config/redis.js';
@@ -57,6 +58,7 @@ app.use('/api/slots', slotRoutes);
 app.use('/api/appointment', appointmentRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/chats', chatRoutes);
+app.use('/api/agora', agoraRoutes);
 
 // Error handling middleware
 app.use(notFoundHandler);
