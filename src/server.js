@@ -21,6 +21,7 @@ import paymentRoutes from './routers/paymentRoutes.js';
 import chatRoutes from './routers/chatRoutes.js';
 
 import { socket } from './socket/routes.js'; 
+import { connectRedis } from './config/redis.js';
 
 const app = express();
 const server = createServer(app);
@@ -30,6 +31,7 @@ const swaggerDocument = mergeSwaggerDocs();
 
 // Connect to database
 connectDB();
+connectRedis();
 
 // Middlewares
 app.use(cors());

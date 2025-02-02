@@ -1,45 +1,44 @@
 class UserSocketManager {
     constructor() {
         this.activeSockets = new Map(); 
-        // this.redisClient = null; 
+        this.redisClient = null; 
     }
 
-    // setRedisClient(redisClient) {
-        // this.redisClient = null;
-    // }
+    setRedisClient(redisClient) {
+        if (redisClient && redisClient.isOpen) {
+            this.redisClient = redisClient;
+        }
+    }
 
-    add(userId, socketId) {
+    async add(userId, socketId) {
+        if (this.redisClient) {
+            await this.redisClient.set(`user:${userId}:socket`, socketId); 
+        }
         this.activeSockets.set(userId, socketId);
-
-        // if (this.redisClient) {
-        //     this.redisClient.set(`user:${userId}:socket`, socketId, 'EX', 3600); // expires in 1 hour
-        // }
     }
 
-    remove(userId) {
+    async remove(userId) {
+        if (this.redisClient) {
+            await this.redisClient.del(`user:${userId}:socket`);
+        }
         this.activeSockets.delete(userId);
-
-        // if (this.redisClient) {
-        //     this.redisClient.del(`user:${userId}:socket`);
-        // }
     }
 
-    get(userId) {
+    async get(userId) {
         let socketId = this.activeSockets.get(userId);
+        
+        if (!socketId && this.redisClient) {
+            socketId = await this.redisClient.get(`user:${userId}:socket`);
+        }
 
-        // if (!socketId && this.redisClient) {
-        //     this.redisClient.get(`user:${userId}:socket`, (err, result) => {
-        //         if (result) {
-        //             socketId = result;
-        //         }
-        //     });
-        // }
-
-        return socketId;
+        return socketId || null; 
     }
 
     getUserId(socketId) {
-        return [...this.activeSockets].find(([_, id]) => id === socketId)?.[0];
+        for (const [userId, id] of this.activeSockets.entries()) {
+            if (id === socketId) return userId;
+        }
+        return null;
     }
 
     isUserOnline(userId) {

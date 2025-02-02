@@ -5,9 +5,9 @@ export class TypingController extends BaseController {
         super(socket, userSocketManager);  
     }
 
-    handleTyping({ from, to }) {
+    async handleTyping({ from, to }) {
         try {
-            const toSocketId = this.userSocketManager.get(to);
+            const toSocketId = await this.userSocketManager.get(to);
 
             if (toSocketId) {
                 this.socket.to(toSocketId).emit('user-typing', { from });
@@ -17,9 +17,9 @@ export class TypingController extends BaseController {
         }
     }
 
-    handleStopTyping({ from, to }) {
+    async handleStopTyping({ from, to }) {
         try {
-            const toSocketId = this.userSocketManager.get(to);
+            const toSocketId = await this.userSocketManager.get(to);
 
             if (toSocketId) {
                 this.socket.to(toSocketId).emit('user-stop-typing', { from });

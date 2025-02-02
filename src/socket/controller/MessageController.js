@@ -69,7 +69,7 @@ export class MessageController extends BaseController {
     }
 
     async handleMessageDelivery(newMessage, to) {
-        const toSocketId = this.userSocketManager.get(to);
+        const toSocketId = await this.userSocketManager.get(to);
 
         if (toSocketId) {
             newMessage.status = MESSAGE_STATUS.DELIVERED;

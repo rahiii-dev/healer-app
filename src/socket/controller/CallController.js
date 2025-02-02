@@ -7,7 +7,7 @@ export class CallController extends BaseController {
   }
 
   async startCall({ from, to }) {
-    const toSocketId = this.userSocketManager.get(to);
+    const toSocketId = await this.userSocketManager.get(to);
 
     if (toSocketId) {
       const sender = await UserModal.findById(from).populate("profile");
@@ -27,8 +27,8 @@ export class CallController extends BaseController {
   }
 
   async acceptCall({ from, to }) {
-    const fromSocketId = this.userSocketManager.get(from);
-    const toSocketId = this.userSocketManager.get(to);
+    const fromSocketId = await this.userSocketManager.get(from);
+    const toSocketId = await this.userSocketManager.get(to);
 
     if (fromSocketId && toSocketId) {
       this.socket.to(fromSocketId).emit("call-accepted", { to });
@@ -41,8 +41,8 @@ export class CallController extends BaseController {
   }
 
   async endCall({ from, to }) {
-    const fromSocketId = this.userSocketManager.get(from);
-    const toSocketId = this.userSocketManager.get(to);
+    const fromSocketId = await this.userSocketManager.get(from);
+    const toSocketId = await this.userSocketManager.get(to);
 
     if (fromSocketId && toSocketId) {
       this.socket.to(fromSocketId).emit("call-ended", { to });
