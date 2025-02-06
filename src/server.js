@@ -43,11 +43,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+const allowedOrigin = process.env.ALLOWED_ORIGIN ? process.env.ALLOWED_ORIGIN : [];
 
 // Middlewares
 app.use(cors({
-  origin: allowedOrigins,
+  origin: allowedOrigin,
 }));
 app.use(express.json());
 app.use(
@@ -98,5 +98,5 @@ io.on('connection', socket);
 // Start the server
 server.listen(environment.PORT, () => {
   console.log(`Server running on PORT:${environment.PORT}`);
-  console.log("Allowed Origin: ", allowedOrigins);
+  console.log("Allowed Origin: ", allowedOrigin);
 });
