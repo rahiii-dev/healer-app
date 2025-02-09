@@ -238,6 +238,10 @@ p {
   background-image: var(--therapist-btn-gradient);
 }
 
+.app-section.therapist-section {
+  flex-direction: row-reverse;
+}
+
 /* Animations */
 @keyframes fadeInUp {
   from {
@@ -280,6 +284,10 @@ footer {
   .app-section {
     flex-direction: column;
     text-align: center;
+  }
+
+  .app-section.therapist-section {
+    flex-direction: column;
   }
 
   .app-text {
