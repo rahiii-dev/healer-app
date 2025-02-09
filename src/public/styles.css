@@ -1,3 +1,25 @@
+/* Define Root Variables */
+:root {
+  --primary-bg: #4e2a84;
+  --secondary-bg: #1f1c7e;
+  --dark-bg: #00035c;
+  --navbar-bg: rgba(0, 0, 0, 0.7);
+  --text-color: white;
+  --highlight-color: #ff7f00;
+  --button-bg: white;
+  --button-hover-bg: transparent;
+  --button-hover-border: white;
+  --section-bg-light: #ffffff;
+  --section-bg-alt: #f9f9f9;
+  --heading-color: #1f1c7e;
+  --text-alt-color: #555;
+  --footer-bg: #111;
+
+  /* Gradients */
+  --client-btn-gradient: linear-gradient(135deg, #0600a7, #00035c);
+  --therapist-btn-gradient: linear-gradient(135deg, #00856f, #06e8b5);
+}
+
 /* Global Styles */
 * {
   margin: 0;
@@ -7,12 +29,26 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to bottom right, #4e2a84, #1f1c7e, #00035c);
-  color: white;
+  background: linear-gradient(
+    to bottom right,
+    var(--primary-bg),
+    var(--secondary-bg),
+    var(--dark-bg)
+  );
+  color: var(--text-color);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  transition: color background 300ms ease;
   line-height: 1.6;
+}
+
+body.dark {
+  --section-bg-light: #1a1a2e;
+  --section-bg-alt: #16213e;
+  --heading-color: #e0e0e0;
+  --text-alt-color: #b3b3b3;
+  --footer-bg: #0f0f1a;
 }
 
 h1,
@@ -34,7 +70,7 @@ p {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--navbar-bg);
   position: fixed;
   top: 0;
   left: 0;
@@ -50,7 +86,7 @@ p {
 .navbar .logo h1 {
   font-size: 1.8rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-color);
 }
 
 .navbar nav ul {
@@ -63,14 +99,14 @@ p {
 }
 
 .navbar nav ul li a {
-  color: white;
+  color: var(--text-color);
   text-decoration: none;
   font-size: 1rem;
   transition: color 0.3s ease;
 }
 
 .navbar nav ul li a:hover {
-  color: #ff7f00;
+  color: var(--highlight-color);
 }
 
 /* Hero Section */
@@ -104,9 +140,9 @@ p {
 }
 
 .hero .btn {
-  background-color: white;
+  background-color: var(--button-bg);
   padding: 12px 25px;
-  color: #1f1c7e;
+  color: var(--secondary-bg);
   font-weight: 500;
   text-decoration: none;
   border-radius: 5px;
@@ -115,9 +151,9 @@ p {
 }
 
 .hero .btn:hover {
-  background-color: transparent;
-  border: 1px solid white;
-  color: white;
+  background-color: var(--button-hover-bg);
+  border: 1px solid var(--button-hover-border);
+  color: var(--text-color);
 }
 
 /* App Sections */
@@ -126,22 +162,16 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: var(--section-bg-light);
   color: #333;
   position: relative;
   overflow: hidden;
   flex-direction: row;
-  border-bottom: 1px solid #f1f1f1;
   transition: all 0.3s ease-in-out;
 }
 
 .app-section:nth-child(odd) {
-  background-color: #f9f9f9;
-}
-
-.app-section:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  background-color: var(--section-bg-alt);
 }
 
 .app-text {
@@ -155,31 +185,14 @@ p {
   font-size: 2.8rem;
   font-weight: 600;
   margin-bottom: 20px;
-  color: #1f1c7e;
+  color: var(--heading-color);
 }
 
 .app-text p {
   font-size: 1.2rem;
   line-height: 1.8;
   margin-bottom: 30px;
-  color: #555;
-}
-
-.app-text a {
-  background-color: #1f1c7e;
-  padding: 14px 30px;
-  color: white;
-  text-decoration: none;
-  text-wrap: nowrap;
-  border-radius: 5px;
-  font-size: 1.2rem;
-  font-weight: 500;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.app-text a:hover {
-  background-color: #312c81;
-  transform: translateY(-3px);
+  color: var(--text-alt-color);
 }
 
 /* App Image */
@@ -192,15 +205,37 @@ p {
 }
 
 .app-image img {
-  max-width: 75%;
+  max-width: 95%;
   height: auto;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 
 .app-image img:hover {
   transform: scale(1.05);
+}
+
+.app-text a {
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: inline-block;
+  transition: transform 0.3s ease-in-out;
+}
+
+.app-text a:hover {
+  transform: translateY(-3px);
+}
+
+.client-section .app-text a {
+  background-image: var(--client-btn-gradient);
+}
+
+.therapist-section .app-text a {
+  background-image: var(--therapist-btn-gradient);
 }
 
 /* Animations */
@@ -219,8 +254,8 @@ p {
 footer {
   padding: 20px;
   text-align: center;
-  background-color: #111;
-  color: white;
+  background-color: var(--footer-bg);
+  color: var(--text-color);
   margin-top: auto;
 }
 
