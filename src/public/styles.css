@@ -17,7 +17,7 @@
 
   /* Gradients */
   --client-btn-gradient: linear-gradient(135deg, #0600a7, #00035c);
-  --therapist-btn-gradient: linear-gradient(135deg, #00856f, #06e8b5);
+  --therapist-btn-gradient: linear-gradient(135deg, #06e8b5, #00856f);
 }
 
 /* Global Styles */
@@ -177,7 +177,7 @@ p {
 .app-text {
   flex: 1;
   padding: 40px;
-  animation: fadeInUp 1s ease-out;
+  animation: fadeInUp 1s ease-out;           
   max-width: 600px;
 }
 
