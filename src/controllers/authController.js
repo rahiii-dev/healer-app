@@ -1,6 +1,6 @@
 import OTP from "../models/OtpModal.js";
 import { USER_GENDERS, UserProfile } from "../models/ProfileModal.js";
-import User, { PROFILE_MODALS, PROFILE_ROLES } from "../models/UserModal.js";
+import User, { DEFAULT_USER_IMAGE, PROFILE_MODALS, PROFILE_ROLES } from "../models/UserModal.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
 import { generateToken } from "../utils/jwt.js";
 import { sendOtpEmail } from "../utils/sendOTP.js";
